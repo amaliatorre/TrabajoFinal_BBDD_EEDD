@@ -15,7 +15,7 @@ public class GestionClientesGUI extends javax.swing.JFrame {
 
         // Cargamos driver y conectamos con la BD
         comprobacion=DBManager.loadDriver();
-        //DBManager.connect();
+        DBManager.connect();
 
         // Obtenemos el ResultSet de clientes y mostramos el primero
         obtenerClientes();
@@ -453,10 +453,10 @@ public class GestionClientesGUI extends javax.swing.JFrame {
             }
 
             // Pedimos la tabla clientes a la base de datos
-            //rsClientes = DBManager.getTablaClientes(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            rsClientes = DBManager.getTablaClientes(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // Movemos cursor al primero
-            //clienteValido = rsClientes.first();
+            clienteValido = rsClientes.first();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
