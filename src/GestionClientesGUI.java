@@ -7,14 +7,14 @@ public class GestionClientesGUI extends javax.swing.JFrame {
 
     private ResultSet rsClientes;
     private boolean clienteValido = false;
-
+    boolean comprobacion;
     public GestionClientesGUI() {
 
         // Inicilización de componentes gráficos
         initComponents();
 
         // Cargamos driver y conectamos con la BD
-        DBManager.loadDriver();
+        comprobacion=DBManager.loadDriver();
         //DBManager.connect();
 
         // Obtenemos el ResultSet de clientes y mostramos el primero

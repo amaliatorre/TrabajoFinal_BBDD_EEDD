@@ -8,9 +8,11 @@ import java.util.Scanner;
 public class GestionClientes {
 
     public static void main(String[] args) {
-
-        DBManager.loadDriver();
-        DBManager.connect();
+    	boolean validacionLoad, validacionConnect;
+    	
+    	
+    	validacionLoad= DBManager.loadDriver();
+    	validacionConnect =DBManager.connect();
 
         boolean salir = false;
         do {
@@ -32,7 +34,7 @@ public class GestionClientes {
         
         Scanner in = new Scanner(System.in);
             
-        int opcion = pideInt("Elige una opciÃ³n: ");
+        int opcion = pideInt("Elige una opción: ");
         
         switch (opcion) {
             case 1:

@@ -14,11 +14,13 @@ public class DBManager {
     // Conexi贸n a la base de datos
     private static Connection conn = null;
 
+    
+    String url = "jdbc:mysql://localhost:3306/demodb?useUnicode=true&characterEncoding=UTF-8";
     // Configuraci贸n de la conexi贸n a la base de datos
     private static final String DB_HOST = "localhost";
     private static final String DB_PORT = "3306";
-    private static final String DB_NAME = "tienda";
-    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?serverTimezone=UTC";
+    private static final String DB_NAME = "tiendadb";
+    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME +"?useUnicode=true&characterEncoding=UTF-8" ;
     private static final String DB_USER = "admin";
     private static final String DB_PASS = "Admin1234";
     private static final String DB_MSQ_CONN_OK = "CONEXI覰 CORRECTA";
@@ -32,7 +34,7 @@ public class DBManager {
     private static final String DB_CLI_DIR = "direccion";
 
     //////////////////////////////////////////////////
-    // M脡TODOS DE CONEXI脫N A LA BASE DE DATOS
+    // METODOS DE CONEXION A LA BASE DE DATOS
     //////////////////////////////////////////////////
     ;
     
@@ -43,8 +45,9 @@ public class DBManager {
 	public static boolean loadDriver() {
         try {
             System.out.print("Cargando Driver...");
-            Class.forName("com.mysql.jdbc.Driver").newInstance();
-            System.out.println("OK!");
+            Class.forName("com.mysql.jdbc.Driver"); 
+           
+            //System.out.println("OK!");
             return true;
         } catch (ClassNotFoundException ex) {
             ex.printStackTrace();
@@ -70,6 +73,7 @@ public class DBManager {
             ex.printStackTrace();
             return false;
         }
+        
     }
 
     /**
@@ -98,7 +102,7 @@ public class DBManager {
      */
     public static void close() {
         try {
-            System.out.print("Cerrando la conexi贸n...");
+            System.out.print("Cerrando la conexi髇...");
             conn.close();
             System.out.println("OK!");
         } catch (SQLException ex) {
