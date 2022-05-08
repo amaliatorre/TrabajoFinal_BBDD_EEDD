@@ -3,19 +3,19 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-public class GestionClientesIGU extends javax.swing.JFrame {
+public class GestionClientesGUI extends javax.swing.JFrame {
 
     private ResultSet rsClientes;
     private boolean clienteValido = false;
 
-    public GestionClientesIGU() {
+    public GestionClientesGUI() {
 
         // Inicilización de componentes gráficos
         initComponents();
 
         // Cargamos driver y conectamos con la BD
         DBManager.loadDriver();
-        DBManager.connect();
+        //DBManager.connect();
 
         // Obtenemos el ResultSet de clientes y mostramos el primero
         obtenerClientes();
@@ -453,10 +453,10 @@ public class GestionClientesIGU extends javax.swing.JFrame {
             }
 
             // Pedimos la tabla clientes a la base de datos
-            rsClientes = DBManager.getTablaClientes(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
+            //rsClientes = DBManager.getTablaClientes(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_UPDATABLE);
 
             // Movemos cursor al primero
-            clienteValido = rsClientes.first();
+            //clienteValido = rsClientes.first();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
@@ -677,13 +677,13 @@ public class GestionClientesIGU extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GestionClientesIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionClientesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GestionClientesIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionClientesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GestionClientesIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionClientesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GestionClientesIGU.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(GestionClientesGUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -697,7 +697,7 @@ public class GestionClientesIGU extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GestionClientesIGU().setVisible(true);
+                new GestionClientesGUI().setVisible(true);
             }
         });
     }

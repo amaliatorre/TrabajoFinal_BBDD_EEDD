@@ -19,10 +19,10 @@ public class DBManager {
     private static final String DB_PORT = "3306";
     private static final String DB_NAME = "tienda";
     private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?serverTimezone=UTC";
-    private static final String DB_USER = "root";
-    private static final String DB_PASS = "";
-    private static final String DB_MSQ_CONN_OK = "CONEXIÃ“N CORRECTA";
-    private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXIÃ“N";
+    private static final String DB_USER = "admin";
+    private static final String DB_PASS = "Admin1234";
+    private static final String DB_MSQ_CONN_OK = "CONEXIÓN CORRECTA";
+    private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXIÓN";
 
     // ConfiguraciÃ³n de la tabla Clientes
     private static final String DB_CLI = "clientes";
@@ -40,10 +40,10 @@ public class DBManager {
      * Intenta cargar el JDBC driver.
      * @return true si pudo cargar el driver, false en caso contrario
      */
-    public static boolean loadDriver() {
+	public static boolean loadDriver() {
         try {
             System.out.print("Cargando Driver...");
-            Class.forName("com.mysql.cj.jdbc.Driver").newInstance();
+            Class.forName("com.mysql.jdbc.Driver").newInstance();
             System.out.println("OK!");
             return true;
         } catch (ClassNotFoundException ex) {
