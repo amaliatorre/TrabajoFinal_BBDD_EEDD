@@ -23,7 +23,7 @@ public class DBManager {
     private static final String DB_HOST = "localhost";
     private static final String DB_PORT = "3306";
     private static final String DB_NAME = "tiendadb";
-    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME +"?useUnicode=true&characterEncoding=UTF-8" ;
+    private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?useUnicode=true&characterEncoding=UTF-8"  ;
     private static final String DB_USER = "admin";
     private static final String DB_PASS = "Admin1234";
     private static final String DB_MSQ_CONN_OK = "CONEXIÓN CORRECTA";
@@ -35,7 +35,7 @@ public class DBManager {
     private static final String DB_CLI_ID = "id";
     private static final String DB_CLI_NOM = "nombre";
     private static final String DB_CLI_DIR = "direccion";
-
+    
 				    /****************/
 				    /*CONEXION BBDD */
 				    /***************/ 
@@ -144,11 +144,17 @@ public class DBManager {
      */
     public static ResultSet getTablaClientes(int resultSetType, int resultSetConcurrency) {
         try {
-            Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
+        	
+        	PreparedStatement stmt =(PreparedStatement) conn.prepareStatement (DB_CLI_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        	
+            //Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
+            /*CONSULTA SQL --> db_cli_select = SELECT* FROM clientes*/
+        	
             ResultSet rs = stmt.executeQuery(DB_CLI_SELECT);
           
             return rs;
-        } catch (SQLException ex) {
+        } catch (SQLException ex) 
+        {
             ex.printStackTrace();
             return null;
         }  
@@ -176,7 +182,8 @@ public class DBManager {
         try {
             // Realizamos la consulta SQL
         	Statement stmt =conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-            String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
+          /*CONSULTA SQL*/
+        	String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
             //System.out.println(sql);
             ResultSet rs = stmt.executeQuery(sql);
             //stmt.close();
@@ -254,16 +261,27 @@ public class DBManager {
      * @return verdadero si pudo insertarlo, false en caso contrario
      */
     public static boolean insertCliente(String nombre, String direccion) {
+    	 
         try {
             // Obtenemos la tabla clientes
             System.out.print("Insertando cliente " + nombre + "...");
             ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
+            int contador = 0;
+
+            while (rs.next()) 
+            {
+            	//nuemero de filas
+                contador++;
+            }
+            int  id=contador+1;
             // Insertamos el nuevo registro
             rs.moveToInsertRow();
+            rs.updateInt(DB_CLI_ID, id);
             rs.updateString(DB_CLI_NOM, nombre);
             rs.updateString(DB_CLI_DIR, direccion);
             rs.insertRow();
+            rs.moveToCurrentRow();
 
             // Todo bien, cerramos ResultSet y devolvemos true
             rs.close();

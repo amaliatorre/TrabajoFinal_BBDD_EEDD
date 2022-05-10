@@ -6,8 +6,9 @@ import java.util.Scanner;
  * @author 
  */
 public class GestionClientes {
-
-	/*MAIN*/
+				/*******/
+				/*MAIN*/
+				/*******/
     public static void main(String[] args) 
     {
     	
@@ -157,14 +158,18 @@ public class GestionClientes {
         Scanner in = new Scanner(System.in);
 
         System.out.println("Introduce los datos del nuevo cliente:");
+       
         String nombre = pideLinea("Nombre: ");
         String direccion = pideLinea("Dirección: ");
 
         boolean res = DBManager.insertCliente(nombre, direccion);
 
-        if (res) {
+        if (res) 
+        {
             System.out.println("Cliente registrado correctamente");
-        } else {
+        } 
+        else 
+        {
             System.out.println("Error :(");
         }
     }

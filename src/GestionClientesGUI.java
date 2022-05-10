@@ -3,6 +3,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
+/*--LLAMA A LOAD /CONNECT CLIENTE-- DBMANAGER*/
 public class GestionClientesGUI extends javax.swing.JFrame {
 
     private ResultSet rsClientes;
@@ -10,7 +11,7 @@ public class GestionClientesGUI extends javax.swing.JFrame {
     boolean comprobacion;
     public GestionClientesGUI() {
 
-        // Inicilizaci√≥n de componentes gr√°ficos
+        // InicilizaciÛn de componentes gr·ficos
         initComponents();
 
         // Cargamos driver y conectamos con la BD
@@ -29,6 +30,8 @@ public class GestionClientesGUI extends javax.swing.JFrame {
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    
+    /*--INICIALIZACI”N DE VARIABLES-- */
     private void initComponents() {
 
         jfNuevoCliente = new javax.swing.JFrame();
@@ -414,7 +417,8 @@ public class GestionClientesGUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    /*--LLAMA A CLOSE CLIENTE-- DBMANAGER*/
     private void formWindowClosed(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosed
 
         // Cerramos el ResultSet de clientes
@@ -445,6 +449,7 @@ public class GestionClientesGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_btnUltimoActionPerformed
 
     // Pide los clientes a la base de datos y los guarda en ResultSet rsClientes
+    /*--LLAMA A GET TABALA CLIENTE-- DBMANAGER*/
     private void obtenerClientes() {
         try {
             // Cerramos el ResultSet actual
@@ -562,7 +567,8 @@ public class GestionClientesGUI extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_btnEditarActionPerformed
-
+    
+    /*--LLAMA A DELETE CLIENTE-- DBMANAGER*/
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
 
         if (!clienteValido) {
@@ -599,6 +605,8 @@ public class GestionClientesGUI extends javax.swing.JFrame {
         jfNuevoCliente.setVisible(true);
     }//GEN-LAST:event_btnNuevoActionPerformed
 
+    
+    /*--LLAMA A INSERT CLIENTE-- DBMANAGER*/
     private void btnVNCAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVNCAceptarActionPerformed
         // Registramos nuevo cliente en la base de datos
         String nombre = txtVNCNombre.getText();
@@ -618,7 +626,8 @@ public class GestionClientesGUI extends javax.swing.JFrame {
         jfNuevoCliente.setVisible(false);
         this.setVisible(true);
     }//GEN-LAST:event_btnVNCCancelarActionPerformed
-
+    
+    /*--LLAMA A UPDATE CLIENTE-- DBMANAGER*/
     private void btnVECAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVECAceptarActionPerformed
         // Registramos nuevo cliente en la base de datos
         int id = Integer.parseInt(lblVECIdCliente.getText());
@@ -663,15 +672,23 @@ public class GestionClientesGUI extends javax.swing.JFrame {
         return (result == 0);
     }
 
-    public static void main(String args[]) {
+    
+										    /*******/
+											/*MAIN*/
+											/*******/
+    public static void main(String args[]) 
+    {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+        try 
+        {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) 
+            {
+                if ("Nimbus".equals(info.getName())) 
+                {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
