@@ -1,4 +1,13 @@
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 /**
@@ -9,7 +18,7 @@ public class GestionClientes {
 				/*******/
 				/*MAIN*/
 				/*******/
-    public static void main(String[] args) 
+    public static void main(String[] args) throws IOException
     {
     	
     	boolean validacionLoad, validacionConnect;
@@ -37,8 +46,9 @@ public class GestionClientes {
     /**
      * Menú prinicpal 
      * @return true para salir del menu y false para continuar en el 
+     * @throws IOException 
      */
-    public static boolean menuPrincipal() 
+    public static boolean menuPrincipal() throws IOException 
     {
     	Scanner in = new Scanner(System.in);
     	
@@ -48,30 +58,46 @@ public class GestionClientes {
         System.out.println("2. Nuevo cliente");
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
-        System.out.println("5. Salir");
-            
+        System.out.println("5. Guardar información de lista clientes en el fichero");
+        System.out.println("6. SALIR");
+        
+        boolean validacion=false;
+        String busquedaDireccion;
         int opcion = pideInt("Elige una opción: ");
         
         
-        switch (opcion) {
+        switch (opcion) 
+        {
             case 1:
                 opcionMostrarClientes();
-                return false;
+                break;
+                
             case 2:
                 opcionNuevoCliente();
-                return false;
+                break;
             case 3:
                 opcionModificarCliente();
-                return false;
+                break;
             case 4:
                 opcionEliminarCliente();
-                return false;
-            case 5:
-                return true;
+                break;
+            case 5: crearDirectorio();
+            		File fichero=crearFichero();
+            		guardarEnFichero(fichero);
+            	break;
+          /*  case 6: System.out.println("Que direccion quiere consultar:");
+            	busquedaDireccion=in.nextLine();
+            	String consulta="select *";
+            	PrepareStatement busqueda=conexionPrepareStatement(consulta);*/
+            case 6: 
+            	validacion=true;
+            	return validacion;
+   
             default:
                 System.out.println("Opción elegida incorrecta");
                 return false;
         }
+		return validacion;
         
     }
     
@@ -127,6 +153,110 @@ public class GestionClientes {
                 System.out.println("No has introducido una cadena de texto. Vuelve a intentarlo.");
             }
         }
+    }
+		
+		    /****************/
+			/*BLOQUE FICHERO*/
+			/****************/
+    
+		/*******************/
+		/*CREAR DIRECTORIO*/
+		/******************/
+		 /* @throws IOException */
+    /**Me aseguro que la información se almacene en un directorio conocido y el fichero teng el nombre que quiero para
+     * poder ordenar mejor al infromacion y como seguridad por si se olvida de la localizacion y almacenar todo lo referente
+     * en ese directorio*/
+    public static void crearDirectorio() throws IOException 
+    {
+
+    	String directorioRuta = "./clientesInformacion";
+    	Path path = Paths.get(directorioRuta);
+    	try
+    	{
+    		if  (!Files.exists(path))
+    		{
+    			Files.createDirectory(path);
+	        	System.out.println(path.getFileName());
+	        	System.out.println("No existe, hemos creado un directorio para almaceanr toda la información relacionada");
+	        	System.out.println("Directorio creado !!   "+ directorioRuta);
+			}	
+    	}
+    	catch (IOException e)
+    	{
+    		e.getStackTrace();
+    	}
+
+    }
+	    /****************/
+		/*CREAR FICHERO*/
+		/***************/
+    public static File crearFichero() throws IOException 
+    {
+    	String ficheroRuta = "./clientesInformacion/ClientesTodaInformacion.txt";
+    	File fichero = new File(ficheroRuta);
+    	try
+    	{
+	    	if(!fichero.exists())
+	    	{
+	    		fichero.createNewFile();
+	    		System.out.println("Se ha creado el fichero dentro del directorio 'clientesInformacion'");
+	    	}
+	    	else
+	    	{
+	    		System.out.println("Ya tienes el fichero creado de antes...");
+	    	}
+	    	
+    	}
+    	catch(NullPointerException eNull)
+    	{
+    		eNull.getStackTrace();
+    		System.out.println("Existe un error al instanciar file");
+    	}
+    	catch(SecurityException eSecurity)
+    	{
+    		eSecurity.getStackTrace();
+    		System.out.println("Existe un error en la existencia del fichero o al crearlo");
+    	}
+		return fichero;	
+    }
+    /*********************************/
+	/*GUARDAR INFORMACION EN FICHERO*/
+	/********************************/
+
+    public static void guardarEnFichero(File ficheroCreado) throws IOException 
+    {
+    	final String DB_CLI_ID = "id";
+        final String DB_CLI_NOM = "nombre";
+        final String DB_CLI_DIR = "direccion";
+    	try 
+    	{
+	    	String ruta=ficheroCreado.getAbsolutePath();
+	    	FileWriter fw = new FileWriter(ruta, false);
+	    	BufferedWriter bw = new BufferedWriter(fw);
+	    	
+    	
+	        System.out.println("Listado de Clientes:");
+	        ResultSet informacionClientes= DBManager.getTablaClientes();
+    
+	        while (informacionClientes.next()) 
+	        {
+	            int id = informacionClientes.getInt(DB_CLI_ID);
+	            String n = informacionClientes.getString(DB_CLI_NOM);
+	            String d = informacionClientes.getString(DB_CLI_DIR);
+	            String lineaUsuario=id + ", " + n + ", " + d;
+	            fw.write(lineaUsuario + "\n");
+	            
+	            System.out.println(id + "\t" + n + "\t" + d);
+	        }
+	        fw.close();
+	        informacionClientes.close();
+        
+    	} 
+    	catch (SQLException ex) 
+    	{
+    		ex.printStackTrace();
+    	}
+       
     }
 
 			/****************/
