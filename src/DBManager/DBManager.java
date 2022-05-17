@@ -1,3 +1,4 @@
+package DBManager;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -125,7 +126,28 @@ public class DBManager {
             ex.printStackTrace();
         }
     }
-
+    /*************/
+    /*MANDAR CONN*/
+    /************/
+    
+    public static Connection mandarConexion ()
+    {
+    	Connection conexion = null;
+    	loadDriver();
+    	if(connect())
+    	{
+    		try
+    		{
+    			conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+    		}
+    		catch(SQLException ex)
+    		{
+    			System.out.println("Hay un problema con la conexion a la base de datos");
+    		}
+    	}
+    	return conexion=conn;
+    }
+ 
 					    /**********************/
 					    /*METODOS GENERAL GET */
 					    /*********************/ 
@@ -267,17 +289,10 @@ public class DBManager {
             System.out.print("Insertando cliente " + nombre + "...");
             ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
-            int contador = 0;
-
-            while (rs.next()) 
-            {
-            	//nuemero de filas
-                contador++;
-            }
-            int  id=contador+1;
+            int filaQueApunta=rs. getRow();
+            System.out.println(filaQueApunta);
             // Insertamos el nuevo registro
             rs.moveToInsertRow();
-            rs.updateInt(DB_CLI_ID, id);
             rs.updateString(DB_CLI_NOM, nombre);
             rs.updateString(DB_CLI_DIR, direccion);
             rs.insertRow();

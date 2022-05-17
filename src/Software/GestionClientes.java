@@ -1,14 +1,18 @@
+package Software;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
+import java.io.IOException;	
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Scanner;
+import org.junit.Test;
+
+import DBManager.DBManager;
 
 /**
  *
@@ -18,6 +22,14 @@ public class GestionClientes {
 				/*******/
 				/*MAIN*/
 				/*******/
+	
+	@Test
+	public void JunitMethod() {
+		System.out.println("Test Inicializado....");
+	}
+	
+	
+	
     public static void main(String[] args) throws IOException
     {
     	
@@ -54,12 +66,14 @@ public class GestionClientes {
     	
         System.out.println("");
         System.out.println("MENU PRINCIPAL");
+        System.out.println("0. Listar clientes");
         System.out.println("1. Listar clientes");
         System.out.println("2. Nuevo cliente");
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
         System.out.println("5. Guardar información de lista clientes en el fichero");
-        System.out.println("6. SALIR");
+        System.out.println("6. Crear Descuentos ");
+        System.out.println("7. SALIR");
         
         boolean validacion=false;
         String busquedaDireccion;
@@ -68,6 +82,10 @@ public class GestionClientes {
         
         switch (opcion) 
         {
+	        case 0:
+	        	validacion=true;
+            	return validacion;
+	            
             case 1:
                 opcionMostrarClientes();
                 break;
@@ -85,13 +103,27 @@ public class GestionClientes {
             		File fichero=crearFichero();
             		guardarEnFichero(fichero);
             	break;
-          /*  case 6: System.out.println("Que direccion quiere consultar:");
-            	busquedaDireccion=in.nextLine();
-            	String consulta="select *";
-            	PrepareStatement busqueda=conexionPrepareStatement(consulta);*/
             case 6: 
-            	validacion=true;
-            	return validacion;
+            Scanner ent = new Scanner(System.in);
+            Descuentos descuentos = new Descuentos ();
+            String ciudad;
+            double desc;
+            System.out.println("Diga a que ciudad quiere hacerle el descuento");
+            ciudad=ent.nextLine();
+           //mostrar tabla descuento 
+            
+            
+            
+            System.out.println("Que tipo de descuento quiere aplicarle");
+            desc=ent.nextDouble();
+            
+            
+            
+            
+            
+            	break;
+            case 7: 
+            	
    
             default:
                 System.out.println("Opción elegida incorrecta");

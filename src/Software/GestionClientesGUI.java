@@ -1,7 +1,10 @@
+package Software;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
+
+import DBManager.DBManager;
 
 /*--LLAMA A LOAD /CONNECT CLIENTE-- DBMANAGER*/
 public class GestionClientesGUI extends javax.swing.JFrame {
