@@ -12,8 +12,11 @@ import DBManager.DBManager;
 
 import java.sql.ResultSet;
 public class Descuentos {
-	
-	
+	private static String DB_DES_ID="id_descuento";
+	private static String DB_DES_PORC="porcentaje";
+	private static String DB_DES_REB="tipo_rebaja";
+	private static String DB_DES ="descuento";
+	private static String DB_DES_SELECT="SELECT * FROM " + DB_DES;
 	
 	private int id_descuento;
 	private double porcentaje;
@@ -73,6 +76,8 @@ public class Descuentos {
 		this.tipo_rebajas = tipo_rebajas;
 	}
 	
+	
+	/*BLOQUE METODOS*/
 	public void CrearDescuentos()
 	{
 		
@@ -80,19 +85,36 @@ public class Descuentos {
 		
 		
 	}
-	public static ResultSet getTablaClientes(int resultSetType, int resultSetConcurrency) {
-		String DB_DES ="descuento";
-		String DB_CLI_SELECT="SELECT * FROM " + DB_DES;
+	
+	 public static void printTablaDescuentos() {
+	        try {
+	        	System.out.println("Tabla descuentos");
+	            ResultSet rs = getTablaDescuentos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+	            while (rs.next()) {
+	                int id = rs.getInt(DB_DES_ID);
+	                double porc = rs.getDouble(DB_DES_PORC);
+	                String reb = rs.getString(DB_DES_REB);
+	                System.out.println("ID" + id + "\t" + porc +"%" + "\t" + "Status " + reb);
+	            }
+	            rs.close();
+	        } catch (SQLException ex) {
+	        	System.out.println("Ha habido un error al imprimir la tabal de descuentos");
+	        }
+	    }
+
+	
+	public static ResultSet getTablaDescuentos(int resultSetType, int resultSetConcurrency) {
+		
 
 		try 
 	       {
 	        	
-	        PreparedStatement stmt =(PreparedStatement) conexion.prepareStatement (DB_CLI_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	        PreparedStatement stmt =(PreparedStatement) conexion.prepareStatement (DB_DES_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
 	        	
 	        //Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
 	       /*CONSULTA SQL --> db_cli_select = SELECT* FROM clientes*/
 	        	
-	        ResultSet rs = stmt.executeQuery(DB_CLI_SELECT);
+	        ResultSet rs = stmt.executeQuery(DB_DES_SELECT);
 	          
 	        return rs;
 	       } 
@@ -103,5 +125,130 @@ public class Descuentos {
 	       }  
 	    }
 	
-	
+	/*CRUD*/
+	 public static boolean insertDescuentos(String nombreDescuento, double porcentaje) {
+    	 	boolean validacion=true;
+	        try {
+	          
+	            System.out.print("Insertando nuevo de descuento " + nombreDescuento + "...");
+	            ResultSet rs = getTablaDescuentos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+	     
+	            int filaQueApunta=rs. getRow();
+	            System.out.println(filaQueApunta);
+	            // Insertamos el nuevo registro
+	            rs.moveToInsertRow();
+	            rs.updateString(DB_DES_REB, nombreDescuento);
+	            rs.updateDouble(DB_DES_PORC, porcentaje);
+	            rs.insertRow();
+	            rs.moveToCurrentRow();
+
+	            // Todo bien, cerramos ResultSet y devolvemos true
+	            rs.close();
+	            System.out.println("OK!");
+	            return true;
+
+	        } catch (SQLException ex) {
+	        	System.out.print("Existe un problema insertar el descuento");
+	            return false;
+	        }
+	    }
+
+	 public static boolean existDescuento(String nombreDescuento) 
+	 {
+		 boolean resultado=true;
+		 try 
+		 {
+			 ResultSet rs = getTablaDescuentos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
+			 while (rs.next()) 
+			 {
+	              String reb = rs.getString(DB_DES_REB);
+	              if(reb==nombreDescuento)
+	              {
+	            	  System.out.println("El nombre del descuento ya existe");
+	            	  resultado=true;
+	              }
+	         }
+	            rs.close();
+	         
+		 }
+		 catch(SQLException e)
+		 {
+			 resultado =false;
+		 }
+		
+		 return resultado;
+ 
+	 }
+	 public static ResultSet getDescuentoNombre(String busquedaDni) 
+		{
+			try 
+			{			        	
+				
+	        	PreparedStatement stmtTablaCliente = (PreparedStatement)conexion.prepareStatement ( DB_DES_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+	        	
+	        	String query = DB_DES_SELECT + " WHERE dni = '" + busquedaDni + "'";
+	        	
+	        	try 
+	        	{
+	        		ResultSet rs = stmtTablaCliente.executeQuery(query);
+	        		rs.first();
+	        		String clienteNombre = rs.getString(DB_DES_REB);
+	        		System.out.println("SUCCESS - Se ha encontrado el cliente con DNI: " + busquedaDni + " " + clienteNombre);	
+	        		return rs;
+	        	}
+	        	catch(Exception ex) 
+	        	{
+	        		System.out.println("No existe este uuario en nuestra base de datos...");
+	        	}		
+			} 
+			catch (SQLException ex) 
+			{
+				ex.printStackTrace();
+				System.out.println("Existe un problema al realizar la conexión con BBDD");			
+			}
+			
+			return null;
+		}
+	  
+	 public static boolean deleteDescuento(String nombreDescuento) {
+	        try {
+	            System.out.print("Eliminando cliente " + nombreDescuento + "... ");
+	            nombreDescuento=nombreDescuento.toLowerCase();
+	            // Obtenemos el cliente
+	            ResultSet rs = getDescuentoNombre(nombreDescuento);
+
+	            // Si no existe el Resultset
+	            if (rs == null) {
+	                System.out.println("ERROR. ResultSet null.");
+	                return false;
+	            }
+	            if (rs.first()) {
+	                rs.deleteRow();
+	                rs.close();
+	                System.out.println("OK!");
+	                return true;
+	            } else {
+	                System.out.println("ERROR. ResultSet vacÃ­o.");
+	                return false;
+	            }
+
+	        } catch (SQLException ex) {
+	            ex.printStackTrace();
+	            return false;
+	        }
+	    }
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
+	 
 }

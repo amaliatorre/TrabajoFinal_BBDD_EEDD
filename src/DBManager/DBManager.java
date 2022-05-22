@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import com.mysql.jdbc.CallableStatement;
 import com.mysql.jdbc.PreparedStatement;
 
 import java.sql.ResultSet;
@@ -16,7 +17,7 @@ import java.sql.ResultSet;
 public class DBManager {
 
     // Conexión a la base de datos
-    private static Connection conn = null;
+    protected static Connection conn = null;
 
     
     //String url = "jdbc:mysql://localhost:3306/demodb?useUnicode=true&characterEncoding=UTF-8";
@@ -35,7 +36,8 @@ public class DBManager {
     private static final String DB_CLI_SELECT = "SELECT * FROM " + DB_CLI;
     private static final String DB_CLI_ID = "id";
     private static final String DB_CLI_NOM = "nombre";
-    private static final String DB_CLI_DIR = "direccion";
+    private static final String DB_CLI_CIU = "ciudad";
+    private static final String DB_CLI_SP_DESC = "CALL sp_DescuentosPorCiudad(?)";
     
 				    /****************/
 				    /*CONEXION BBDD */
@@ -203,11 +205,28 @@ public class DBManager {
     public static ResultSet getCliente(int id) {
         try {
             // Realizamos la consulta SQL
-        	Statement stmt =conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
+        	Statement stmt = conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
           /*CONSULTA SQL*/
         	String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
             //System.out.println(sql);
-            ResultSet rs = stmt.executeQuery(sql);
+        	
+            ResultSet rs = stmt.executeQuery(sql);            
+
+            if(rs.first()) 
+            {
+            	
+            	String SQL = DB_CLI_SP_DESC;
+                CallableStatement cstmt = (CallableStatement) conn.prepareCall(SQL);
+
+                cstmt.setString(1, rs.getString(DB_CLI_CIU));
+                ResultSet rsSp = cstmt.executeQuery();
+                if(rsSp.first()) 
+                {
+                	System.out.println("Tu descuento por ciudad es de: " + rsSp.getInt("Descuento"));                	
+                }
+            }
+            
+                                  
             //stmt.close();
             
             // Si no hay primer registro entonces no existe el cliente
@@ -294,7 +313,7 @@ public class DBManager {
             // Insertamos el nuevo registro
             rs.moveToInsertRow();
             rs.updateString(DB_CLI_NOM, nombre);
-            rs.updateString(DB_CLI_DIR, direccion);
+            rs.updateString(DB_CLI_CIU, direccion);
             rs.insertRow();
             rs.moveToCurrentRow();
 
@@ -332,7 +351,7 @@ public class DBManager {
             // Si tiene un primer registro, lo eliminamos
             if (rs.first()) {
                 rs.updateString(DB_CLI_NOM, nuevoNombre);
-                rs.updateString(DB_CLI_DIR, nuevaDireccion);
+                rs.updateString(DB_CLI_CIU, nuevaDireccion);
                 rs.updateRow();
                 rs.close();
                 System.out.println("OK!");
@@ -395,7 +414,7 @@ public class DBManager {
             while (rs.next()) {
                 int id = rs.getInt(DB_CLI_ID);
                 String n = rs.getString(DB_CLI_NOM);
-                String d = rs.getString(DB_CLI_DIR);
+                String d = rs.getString(DB_CLI_CIU);
                 System.out.println(id + "\t" + n + "\t" + d);
             }
             rs.close();
@@ -421,7 +440,7 @@ public class DBManager {
             // Imprimimos su informaciÃ³n por pantalla
             int cid = rs.getInt(DB_CLI_ID);
             String nombre = rs.getString(DB_CLI_NOM);
-            String direccion = rs.getString(DB_CLI_DIR);
+            String direccion = rs.getString(DB_CLI_CIU);
             System.out.println("Cliente " + cid + "\t" + nombre + "\t" + direccion);
 
         } catch (SQLException ex) {

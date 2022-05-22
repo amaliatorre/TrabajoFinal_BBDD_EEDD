@@ -38,6 +38,8 @@ public class GestionClientes {
     	validacionLoad= DBManager.loadDriver();
     	validacionConnect =DBManager.connect();
 
+    	
+    	
         boolean salir = false;
         
         do 
@@ -72,7 +74,7 @@ public class GestionClientes {
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
         System.out.println("5. Guardar información de lista clientes en el fichero");
-        System.out.println("6. Crear Descuentos ");
+        System.out.println("6. Crear Descuentos nuevos");
         System.out.println("7. SALIR");
         
         boolean validacion=false;
@@ -104,18 +106,27 @@ public class GestionClientes {
             		guardarEnFichero(fichero);
             	break;
             case 6: 
+           
             Scanner ent = new Scanner(System.in);
             Descuentos descuentos = new Descuentos ();
-            String ciudad;
-            double desc;
-            System.out.println("Diga a que ciudad quiere hacerle el descuento");
-            ciudad=ent.nextLine();
-           //mostrar tabla descuento 
+            String nombreDescuento;
+            double porcentaje;
+            System.out.println("Diga el nombre del nuevo descuento");
+            nombreDescuento=ent.nextLine();
+           if (Descuentos.existDescuento(nombreDescuento))
+           {
+        	   System.out.println("El nombre del descuento ya existe, debe de seleccionar otro nombre");
+        	   Descuentos.printTablaDescuentos();
+           }
+           else
+           {
+        	   System.out.println("Diga el nombre del nuevo descuento");
+               porcentaje=ent.nextDouble();
+        	   Descuentos.insertDescuentos(nombreDescuento,porcentaje);
+           }
             
             
-            
-            System.out.println("Que tipo de descuento quiere aplicarle");
-            desc=ent.nextDouble();
+         
             
             
             
