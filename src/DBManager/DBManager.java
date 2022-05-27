@@ -7,11 +7,13 @@ import java.sql.Statement;
 
 import com.mysql.jdbc.PreparedStatement;
 
+import Software.Cliente;
+
 import java.sql.ResultSet;
 
 /**
  *
- * @author
+ * @author Amalia
  */
 public class DBManager {
 
@@ -194,6 +196,10 @@ public class DBManager {
     /*************/
     /*GET CLIENTE*/
     /************/ 
+    
+   
+    
+    
     
     /**
      * Solicita a la BD el cliente con id indicado

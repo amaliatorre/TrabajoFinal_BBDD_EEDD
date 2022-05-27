@@ -16,36 +16,29 @@ import DBManager.DBManager;
 
 /**
  *
- * @author 
+ * @author  Amalia
  */
-public class GestionClientes {
-				/*******/
-				/*MAIN*/
-				/*******/
-	
-	@Test
-	public void JunitMethod() {
-		System.out.println("Test Inicializado....");
-	}
-	
-	
-	
+public class GestionClientes 
+{
+				
+	/*******/
+	/*MAIN*/
+	/*******/
     public static void main(String[] args) throws IOException
-    {
-    	
+    {	
     	boolean validacionLoad, validacionConnect;
-    	
     	validacionLoad= DBManager.loadDriver();
     	validacionConnect =DBManager.connect();
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
         boolean salir = false;
-        
         do 
         {
             salir = menuPrincipal();
         } 
         while (!salir);
-
         DBManager.close();
     }
     						/************/
@@ -66,19 +59,27 @@ public class GestionClientes {
     	
         System.out.println("");
         System.out.println("MENU PRINCIPAL");
-        System.out.println("0. Listar clientes");
+        System.out.println("0. Exit");
         System.out.println("1. Listar clientes");
         System.out.println("2. Nuevo cliente");
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
         System.out.println("5. Guardar información de lista clientes en el fichero");
+<<<<<<< Updated upstream
         System.out.println("6. Crear Descuentos ");
         System.out.println("7. SALIR");
+=======
+        System.out.println("6. Crear Descuentos nuevos");
+        System.out.println("7. Borrar Descuento");
+        System.out.println("8. Descubrir que descuento tiene su ciudad!!!");
+        
+>>>>>>> Stashed changes
         
         boolean validacion=false;
         String busquedaDireccion;
         int opcion = pideInt("Elige una opción: ");
         
+       
         
         switch (opcion) 
         {
@@ -103,6 +104,7 @@ public class GestionClientes {
             		File fichero=crearFichero();
             		guardarEnFichero(fichero);
             	break;
+<<<<<<< Updated upstream
             case 6: 
             Scanner ent = new Scanner(System.in);
             Descuentos descuentos = new Descuentos ();
@@ -121,10 +123,18 @@ public class GestionClientes {
             
             
             
+=======
+            case 6: Descuentos.CrearDescuentos();
+>>>>>>> Stashed changes
             	break;
             case 7: 
-            	
-   
+	            	String nombreDescuento = pideLinea("Diga el nombre del descuento que quiere eliminar:");
+	            	Descuentos.deleteDescuento(nombreDescuento);
+            	break;
+            case 8: String ciudad = pideLinea("Diga su ciudad:");
+            		ciudad= ciudad.toLowerCase();
+            		Descuentos.getDescuento(ciudad);
+            		break;
             default:
                 System.out.println("Opción elegida incorrecta");
                 return false;
@@ -133,6 +143,10 @@ public class GestionClientes {
         
     }
     
+    @Test
+	public void JunitMethod() {
+		System.out.println("Test Inicializado....");
+	}
 	    	/********************/
 	    	/*BLOQUE PEDIR DATOS*/
 	    	/********************/
@@ -144,7 +158,7 @@ public class GestionClientes {
      */
     public static int pideInt(String mensaje)
     {
-        /*while (true) se utiliza para definir un bucle infinito
+        /*mientras (true) se utiliza para definir un bucle infinito
          * Aqui sirve al tener el try en su interior para conseguir repetir solo esta script
          * del mensaje y su espera de valor pro parte del usuario de la otra forma repetiria todo el menu*/
         while(true) 
