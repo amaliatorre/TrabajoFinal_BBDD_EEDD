@@ -19,6 +19,7 @@
  3. BBDD 
     3 A1 Issue #14 Configurar base de datos con usuario contraseña solo para proyecto en MySql  
     3 A2  Issue #11 --> Procedimiento almacenado y correlación con nueva función
+    3 A3 Issues #28 --> crear tabla Java para insertar con parametro nombre tabla y id nombre
    
  4. Proyecto
     4.A1  Issue #16 Corrección ortográfica
