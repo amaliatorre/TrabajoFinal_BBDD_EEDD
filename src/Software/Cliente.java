@@ -1,13 +1,22 @@
 package Software;
 /**
  * 
- * @author amali
+ * @author amalia
  *
  */
-public class Cliente 
+public class Cliente  
 {
+	/**
+	 * parametro int del id de la clase cliente
+	 */
 	private int id;
+	/**
+	 * parametro String de nombre de la clase cliente
+	 */
 	private String nombre;
+	/**
+	 * parametro String de la ciudad de la clase cliente
+	 */
 	private String ciudad;
 	
 	/**

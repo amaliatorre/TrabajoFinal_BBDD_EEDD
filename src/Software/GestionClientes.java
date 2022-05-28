@@ -1,5 +1,8 @@
 package Software;
-
+/**
+*
+* @author Amalia
+*/
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -24,15 +27,12 @@ public class GestionClientes
 	/*******/
 	/*MAIN*/
 	/*******/
+	
     public static void main(String[] args) throws IOException
     {	
     	boolean validacionLoad, validacionConnect;
     	validacionLoad= DBManager.loadDriver();
     	validacionConnect =DBManager.connect();
-<<<<<<< Updated upstream
-
-=======
->>>>>>> Stashed changes
         boolean salir = false;
         do 
         {
@@ -51,11 +51,16 @@ public class GestionClientes
     /**
      * Menú prinicpal 
      * @return true para salir del menu y false para continuar en el 
-     * @throws IOException 
+     * @throws IOException excepciones
      */
     public static boolean menuPrincipal() throws IOException 
     {
     	Scanner in = new Scanner(System.in);
+    	boolean validacion=false;
+        String busquedaDireccion;
+        File fichero;
+        String urlC = "./clientesInformacion/ClientesTodaInformacion.txt";
+        String urlD = "./clientesInformacion/DescuentoTodaInformacion.txt";
     	
         System.out.println("");
         System.out.println("MENU PRINCIPAL");
@@ -65,22 +70,13 @@ public class GestionClientes
         System.out.println("3. Modificar cliente");
         System.out.println("4. Eliminar cliente");
         System.out.println("5. Guardar información de lista clientes en el fichero");
-<<<<<<< Updated upstream
-        System.out.println("6. Crear Descuentos ");
-        System.out.println("7. SALIR");
-=======
-        System.out.println("6. Crear Descuentos nuevos");
-        System.out.println("7. Borrar Descuento");
+        System.out.println("6. Guardar información de lista Descuentos en el fichero");
+        System.out.println("7. Crear Descuentos ");
         System.out.println("8. Descubrir que descuento tiene su ciudad!!!");
-        
->>>>>>> Stashed changes
-        
-        boolean validacion=false;
-        String busquedaDireccion;
+     
+
         int opcion = pideInt("Elige una opción: ");
-        
-       
-        
+
         switch (opcion) 
         {
 	        case 0:
@@ -101,40 +97,24 @@ public class GestionClientes
                 opcionEliminarCliente();
                 break;
             case 5: crearDirectorio();
-            		File fichero=crearFichero();
-            		guardarEnFichero(fichero);
+            		fichero=crearFichero(urlC);
+            		ClienteNombreColumnas NombTablaClientes = new ClienteNombreColumnas();
+            		guardarEnFichero(fichero, NombTablaClientes);
             	break;
-<<<<<<< Updated upstream
             case 6: 
-            Scanner ent = new Scanner(System.in);
-            Descuentos descuentos = new Descuentos ();
-            String ciudad;
-            double desc;
-            System.out.println("Diga a que ciudad quiere hacerle el descuento");
-            ciudad=ent.nextLine();
-           //mostrar tabla descuento 
-            
-            
-            
-            System.out.println("Que tipo de descuento quiere aplicarle");
-            desc=ent.nextDouble();
-            
-            
-            
-            
-            
-=======
-            case 6: Descuentos.CrearDescuentos();
->>>>>>> Stashed changes
+	            	crearDirectorio();
+	        		fichero=crearFichero(urlD);
+	        		DescuentoNombreColumnas NombTablaDescuento = new DescuentoNombreColumnas();
+            		guardarEnFichero(fichero, NombTablaDescuento);
+            	break;	
+            case 7: Descuentos.CrearDescuentos();
             	break;
-            case 7: 
-	            	String nombreDescuento = pideLinea("Diga el nombre del descuento que quiere eliminar:");
-	            	Descuentos.deleteDescuento(nombreDescuento);
-            	break;
+        
             case 8: String ciudad = pideLinea("Diga su ciudad:");
-            		ciudad= ciudad.toLowerCase();
+            		ciudad= ciudad.toUpperCase();
             		Descuentos.getDescuento(ciudad);
             		break;
+
             default:
                 System.out.println("Opción elegida incorrecta");
                 return false;
@@ -144,6 +124,9 @@ public class GestionClientes
     }
     
     @Test
+    /**
+     * Llamada preparada para crear una comunicacion con junit 
+     */
 	public void JunitMethod() {
 		System.out.println("Test Inicializado....");
 	}
@@ -211,7 +194,8 @@ public class GestionClientes
 		 /* @throws IOException */
     /**Me aseguro que la información se almacene en un directorio conocido y el fichero teng el nombre que quiero para
      * poder ordenar mejor al infromacion y como seguridad por si se olvida de la localizacion y almacenar todo lo referente
-     * en ese directorio*/
+     * en ese directorio
+     * @throws excepciones*/
     public static void crearDirectorio() throws IOException 
     {
 
@@ -236,9 +220,15 @@ public class GestionClientes
 	    /****************/
 		/*CREAR FICHERO*/
 		/***************/
-    public static File crearFichero() throws IOException 
+    /**
+     * 
+     * @param url String ruta del fichero a crear
+     * @return Fichero creado
+     * @throws IOException excepcion 
+     */
+    public static File crearFichero(String url) throws IOException 
     {
-    	String ficheroRuta = "./clientesInformacion/ClientesTodaInformacion.txt";
+    	String ficheroRuta = url;
     	File fichero = new File(ficheroRuta);
     	try
     	{
@@ -268,35 +258,60 @@ public class GestionClientes
     /*********************************/
 	/*GUARDAR INFORMACION EN FICHERO*/
 	/********************************/
-
-    public static void guardarEnFichero(File ficheroCreado) throws IOException 
+/**
+ * Con fichero y el objeto tabla guardo la infromacion en este
+ * @param ficheroCreado fichero donde se guardara la info
+ *  @param x objeto tipo tabla con los atributos de nombre de las columnas necesarias
+ * @throws IOException excepciones 
+ */
+    public static void guardarEnFichero(File ficheroCreado, Tabla x) throws IOException 
     {
-    	final String DB_CLI_ID = "id";
-        final String DB_CLI_NOM = "nombre";
-        final String DB_CLI_DIR = "direccion";
+    	
     	try 
     	{
 	    	String ruta=ficheroCreado.getAbsolutePath();
 	    	FileWriter fw = new FileWriter(ruta, false);
 	    	BufferedWriter bw = new BufferedWriter(fw);
 	    	
-    	
-	        System.out.println("Listado de Clientes:");
-	        ResultSet informacionClientes= DBManager.getTablaClientes();
-    
-	        while (informacionClientes.next()) 
-	        {
-	            int id = informacionClientes.getInt(DB_CLI_ID);
-	            String n = informacionClientes.getString(DB_CLI_NOM);
-	            String d = informacionClientes.getString(DB_CLI_DIR);
-	            String lineaUsuario=id + ", " + n + ", " + d;
-	            fw.write(lineaUsuario + "\n");
-	            
-	            System.out.println(id + "\t" + n + "\t" + d);
-	        }
-	        fw.close();
-	        informacionClientes.close();
-        
+	    	if( x.getSimpleName()=="ClienteNombreColumnas")
+	    	{
+		        System.out.println("Listado de Clientes:");
+		        ResultSet informacionClientes= DBManager.getTablaClientes();
+	    
+		        while (informacionClientes.next()) 
+		        {
+		            int id = informacionClientes.getInt(x.getID());
+		            String n = informacionClientes.getString(x.getNOMBRE());
+		            String c = informacionClientes.getString(x.getCIUDAD());
+		            String lineaUsuario=id + ", " + n + ", " + c;
+		            fw.write(lineaUsuario + "\n");
+		            
+		            System.out.println(id + "\t" + n + "\t" + c);
+		        }
+			        fw.close();
+			        informacionClientes.close();
+		    	}
+	    	
+	    	else if (x.getSimpleName()=="DescuentoNombreColumnas")
+	    	{
+	    		
+	    		 System.out.println("Listado de Descuentos:");
+			     ResultSet informacionDescuentos= Descuentos.getTablaDescuentos();
+		    
+			        while (informacionDescuentos.next()) 
+			        {
+			            int id =  informacionDescuentos.getInt(x.getID_DESC());
+			            String n =  informacionDescuentos.getString(x.getTIPOREBAJA());
+			            String c = String.valueOf(informacionDescuentos.getDouble(x.getPORCENTAJE()));
+			            String f = (informacionDescuentos.getDate(x.getFECHACREACION())).toString();
+			            String lineaUsuario=id + ", " + n + ", " + c + ", " + f;
+			            fw.write(lineaUsuario + "\n");
+			            
+			            System.out.println(id + "\t" + n + "\t" + c + "\t" + f );
+			        }
+				        fw.close();
+				        informacionDescuentos.close();
+			 }
     	} 
     	catch (SQLException ex) 
     	{
@@ -354,20 +369,13 @@ public class GestionClientes
 	/*MODIFICAR CLIENTE*/
 	/*******************/
     /**
-     * 1 parte:
-     * Pide datos de ID llamadno al metodo pideInt
-     * llama la metodo existCliente de la clase DBManager
-     * si es false muestra por pantalla un mensaje de error
-     * si es true muestra los datos llamando a printCliente de la clase DBManager
-     * 2parte:
-     * llama al metodo updateClientes de la clase DBManager
-     * si es true muestra correcto
-     * si es false hay un error en la modificacion 
-     * 
+     * pide los datos necesarios para modificacion del cliente en BBDD
+     * comprobando y mostrando para conocer id
      */
     public static void opcionModificarCliente() {
         Scanner in = new Scanner(System.in);
 
+        DBManager.printTablaClientes();
         int id = pideInt("Indica el id del cliente a modificar: ");
 
         // Comprobamos si existe el cliente

@@ -1,5 +1,8 @@
 package Software;
-
+/**
+*
+* @author Amalia
+*/
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;

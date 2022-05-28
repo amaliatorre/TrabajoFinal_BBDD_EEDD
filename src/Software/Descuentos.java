@@ -9,29 +9,71 @@ import com.mysql.jdbc.PreparedStatement;
 import DBManager.DBManager;
 
 import java.sql.ResultSet;
+/**
+*
+* @author Amalia
+*/
 public class Descuentos {
-<<<<<<< Updated upstream
-	
-	
-=======
+/**
+ * cte nombre de la columna id_descuento
+ */
 	private static final String DB_DES_ID="id_descuento";
+	/**
+	 * cte nombre de la columna porcentaje
+	 */	
 	private static final String DB_DES_PORC="porcentaje";
+	/**
+	 * cte nombre de la columna tipo_rebaja
+	 */	
 	private static final String DB_DES_REB="tipo_rebaja";
+	/**
+	 * cte nombre de la columna descuento
+	 */	
 	private static final String DB_DES ="descuento";
+	/**
+	 * cte query para visualizar toda la tabla descuentos
+	 */	
 	private static final String DB_DES_SELECT="SELECT * FROM " + DB_DES;
->>>>>>> Stashed changes
-	
+
+	/**
+	 * clave primaria de la tabal descuento 
+	 */
 	private int id_descuento;
+	/**
+	 * double numero de porcentaje del descuento 
+	 */
 	private double porcentaje;
+	/**
+	 * String nombre de la rebaja
+	 */
 	private String tipo_rebajas;
-	
+	/**
+	 * Boolean para validar la carga del driver
+	 */
 	public boolean validacionLoad;
+	/**
+	 * Boolean para validar la carga la conexion con la based de datos
+	 */
 	public boolean validacionConnect;
-	public static Connection conexion = (Connection) DBManager.mandarConexion();
+	/**
+	 * constante de la query del procedure desceunto 
+	 */
 	private static final String DB_CLI_SP_DESC = "CALL sp_DescuentosPremium(?)";
+	/**
+	 * obtiene el objeto connection del DBManager
+	 */
+	public static Connection conexion = (Connection) DBManager.mandarConexion();
 	
+	/**
+	 * Constructor null
+	 */
 	public Descuentos() {}
 	
+	/**
+	 * 
+	 * @param porcentaje double cantidad a rebajar %
+	 * @param tipo_rebajas String nombre descuento 
+	 */
 	public Descuentos(double porcentaje, String tipo_rebajas) 
 	{
 		this.porcentaje=porcentaje;
@@ -80,13 +122,13 @@ public class Descuentos {
 		this.tipo_rebajas = tipo_rebajas;
 	}
 	
-<<<<<<< Updated upstream
-	public void CrearDescuentos()
-=======
+
 	
 	/*BLOQUE METODOS*/
+/**
+ * Crea nuevos descuentos en la tabla descuentos DDBB  
+ */
 	public static void CrearDescuentos() 
->>>>>>> Stashed changes
 	{
 		Scanner ent = new Scanner(System.in);
 		Descuentos descuentos = new Descuentos ();
@@ -106,13 +148,9 @@ public class Descuentos {
 			Descuentos.insertDescuentos(nombreDescuento,porcentaje);
 		}
 	}
-<<<<<<< Updated upstream
-	public static ResultSet getTablaClientes(int resultSetType, int resultSetConcurrency) {
-		String DB_DES ="descuento";
-		String DB_CLI_SELECT="SELECT * FROM " + DB_DES;
-=======
-	
-	
+/**
+ * Ver la tabla exiatente de descuentos
+ */
 	 public static void printTablaDescuentos() {
 	        try {
 	        	System.out.println("Tabla descuentos");
@@ -129,20 +167,19 @@ public class Descuentos {
 	        }
 	    }
 
-	
-	public static ResultSet getTablaDescuentos(int resultSetType, int resultSetConcurrency) {
-		
->>>>>>> Stashed changes
-
+	/**
+	 * Obtiene toda la informacion de BBDD de la tabla descuentos
+	 * @param resultSetType int 
+	 * @param resultSetConcurrency int 
+	 * @return ResultSet con la informacion de tabla descuentos 
+	 */
+	public static ResultSet getTablaDescuentos(int resultSetType, int resultSetConcurrency) 
+	{
 		try 
 	       {
 	        	
-	        PreparedStatement stmt =(PreparedStatement) conexion.prepareStatement (DB_CLI_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-	        	
-	        //Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
-	       /*CONSULTA SQL --> db_cli_select = SELECT* FROM clientes*/
-	        	
-	        ResultSet rs = stmt.executeQuery(DB_CLI_SELECT);
+	        PreparedStatement stmt =(PreparedStatement) conexion.prepareStatement (DB_DES_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE); 	
+	        ResultSet rs = stmt.executeQuery(DB_DES_SELECT);
 	          
 	        return rs;
 	       } 
@@ -152,16 +189,29 @@ public class Descuentos {
 	           return null;
 	       }  
 	    }
+
+	/**
+	 * Acceso generico a la BBDD de la tabla descuentos 
+	 * @return ResultSet toda la informacion filas de la tabla descuentos
+	 * */
+	 public static ResultSet getTablaDescuentos() {
+	      ResultSet tabla = getTablaDescuentos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+		 return tabla;
+	    }
 	
-<<<<<<< Updated upstream
-	
-=======
 	/*CRUD*/
+	/**
+	 * Inserta un descuento nuevo 
+	 * @param nombreDescuento String 
+	 * @param porcentaje double 
+	 * @return true si se ha podidio insertar en BBDD y false si no 
+	 */
 	 public static boolean insertDescuentos(String nombreDescuento, double porcentaje) {
     	 	boolean validacion=true;
 	        try {
 	          
 	            System.out.print("Insertando nuevo de descuento " + nombreDescuento + "...");
+	            nombreDescuento.toUpperCase();
 	            ResultSet rs = getTablaDescuentos(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 	     
 	            int filaQueApunta=rs. getRow();
@@ -183,7 +233,11 @@ public class Descuentos {
 	            return false;
 	        }
 	    }
-
+/**
+ * Comprobacion de nombre de descuento si existe en  BBDD
+ * @param nombreDescuento String nombre de decuento 
+ * @return true si ya existe y false si no existe
+ */
 	 public static boolean existDescuento(String nombreDescuento) 
 	 {
 		 boolean resultado=false;
@@ -210,6 +264,11 @@ public class Descuentos {
 		 return resultado;
  
 	 }
+	 /**
+	  * 
+	  * @param nombreDesc String con el nombre del descuento 
+	  * @return Resultset con la fila del descuento 
+	  */
 	 public static ResultSet getDescuentoNombre(String nombreDesc) 
 		{
 			try 
@@ -239,7 +298,11 @@ public class Descuentos {
 			
 			return null;
 		}
-	  
+	 /**
+	  * Borra descuento de la tabla de BBDD descuento   
+	  * @param nombreDescuento String 
+	  * @return true si se ha podido realizar y false si no 
+	  */
 	 public static boolean deleteDescuento(String nombreDescuento) {
 	        try {
 	            System.out.print("Eliminando descuento " + nombreDescuento + "... ");
@@ -271,11 +334,14 @@ public class Descuentos {
 	        }
 	    }
 	 
-	 
-	 public static ResultSet getDescuento(String ciudad)
-	    {
-	
-		 java.sql.Connection  conn = DBManager.mandarConexion();
+	 /**
+	  * Obtinee la tabla de descuentos BBDD por el filtro de ciudad
+	  * @param ciudad String 
+	  * @return ResultSet con las filas coincidentendes con ciudad
+	  */
+	 public static ResultSet getDescuento(String ciudad) 
+	 {
+		java.sql.Connection  conn = DBManager.mandarConexion();
 	        try 
 	        {
 	            String SQL = DB_CLI_SP_DESC;
@@ -285,26 +351,16 @@ public class Descuentos {
 	            ResultSet rsSp = cstmt.executeQuery();
 	            if(rsSp.first()) 
 	            {
-	                System.out.println("Tu descuento por ciudad es de: " + rsSp.getInt("Descuento"));                	
+	                System.out.println("Tu descuento por ciudad es de: " + rsSp.getInt("Descuento") + "%");                	
 	            }
 	           
 	            return rsSp;
 
-	        } catch (SQLException ex) {
+	        } 
+	        catch (SQLException ex) 
+	        {
 	            System.err.println(ex);
 	            return null;
 	        }
 	    }
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
-	 
->>>>>>> Stashed changes
 }

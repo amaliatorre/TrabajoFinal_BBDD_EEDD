@@ -1,1 +1,1 @@
-typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"Software","l":"Cliente"}];updateSearchResults();
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"Software","l":"Cliente"},{"p":"Software","l":"ClienteNombreColumnas"},{"p":"DBManager","l":"DBManager"},{"p":"Software","l":"DescuentoNombreColumnas"},{"p":"Software","l":"Descuentos"},{"p":"Software","l":"GestionClientes"},{"p":"Software","l":"GestionClientesGUI"},{"p":"Software","l":"ProjectTest"},{"p":"Software","l":"Tabla"}];updateSearchResults();

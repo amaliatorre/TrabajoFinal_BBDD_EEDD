@@ -17,27 +17,72 @@ import java.sql.ResultSet;
  */
 public class DBManager {
 
-    // Conexi髇 a la base de datos
+    /**
+     * Conexi髇 a la base de datos
+     */
     private static Connection conn = null;
 
     
     //String url = "jdbc:mysql://localhost:3306/demodb?useUnicode=true&characterEncoding=UTF-8";
-    // Configuraci髇 de la conexi髇 a la base de datos
+    /**
+     * Configuraci髇 de la conexi髇 a la base de datos
+     */
+    /**
+     * cte nombre de host 
+     */
     private static final String DB_HOST = "localhost";
+    /**
+     * cte nombre del puerto 
+     */
     private static final String DB_PORT = "3306";
+    /**
+     * cte nombre de la DDBB 
+     */
     private static final String DB_NAME = "tiendadb";
+    /**
+     * url con codigo del driver , host, puerto y configuracion de codificacion caracteres 
+     */
     private static final String DB_URL = "jdbc:mysql://" + DB_HOST + ":" + DB_PORT + "/" + DB_NAME + "?useUnicode=true&characterEncoding=UTF-8"  ;
+    /**
+     * cte nombre de usuario 
+     */
     private static final String DB_USER = "admin";
+    /**
+     * cte nombre de la constrase馻
+     */
     private static final String DB_PASS = "Admin1234";
+    /**
+     * cte mensaje conexion correcta
+     */
     private static final String DB_MSQ_CONN_OK = "CONEXI覰 CORRECTA";
+    /**
+     * cte mensaje conexion fallida
+     */
     private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXI覰";
 
-    // Configuraci髇 de la tabla Clientes
+    /**
+     * Configuraci髇 de la tabla Clientes
+     */
+    /**
+     * cte nombre de la tabla clientes
+     */
     private static final String DB_CLI = "clientes";
+    /**
+     * query seleciona toda la tabla clientes
+     */
     private static final String DB_CLI_SELECT = "SELECT * FROM " + DB_CLI;
+    /**
+     * cte nombre de la tabla clientes id
+     */
     private static final String DB_CLI_ID = "id";
+    /**
+     * cte nombre de la tabla clientes nombre
+     */
     private static final String DB_CLI_NOM = "nombre";
-    private static final String DB_CLI_DIR = "direccion";
+    /**
+     * cte nombre de la tabla clientes ciudad
+     */
+    private static final String DB_CLI_CIU = "ciudad";
     
 				    /****************/
 				    /*CONEXION BBDD */
@@ -131,7 +176,10 @@ public class DBManager {
     /*************/
     /*MANDAR CONN*/
     /************/
-    
+    /**
+     * crea el objeto conexion a traves del Drivermanager con el driver, url usser y passwd
+     * @return connection 
+     */ 
     public static Connection mandarConexion ()
     {
     	Connection conexion = null;
@@ -196,11 +244,7 @@ public class DBManager {
     /*************/
     /*GET CLIENTE*/
     /************/ 
-    
-   
-    
-    
-    
+
     /**
      * Solicita a la BD el cliente con id indicado
      * @param id id del cliente
@@ -285,22 +329,23 @@ public class DBManager {
      * Solicita a la BD insertar un nuevo registro cliente
      *
      * @param nombre nombre del cliente
-     * @param direccion direcci贸n del cliente
+     * @param ciudad direcci贸n del cliente
      * @return verdadero si pudo insertarlo, false en caso contrario
      */
-    public static boolean insertCliente(String nombre, String direccion) {
+    public static boolean insertCliente(String nombre, String ciudad) {
     	 
         try {
+        	nombre=nombre.toUpperCase();
+        	ciudad= ciudad.toUpperCase();
             // Obtenemos la tabla clientes
             System.out.print("Insertando cliente " + nombre + "...");
             ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
 
             int filaQueApunta=rs. getRow();
-            System.out.println(filaQueApunta);
             // Insertamos el nuevo registro
             rs.moveToInsertRow();
             rs.updateString(DB_CLI_NOM, nombre);
-            rs.updateString(DB_CLI_DIR, direccion);
+            rs.updateString(DB_CLI_CIU, ciudad);
             rs.insertRow();
             rs.moveToCurrentRow();
 
@@ -308,7 +353,6 @@ public class DBManager {
             rs.close();
             System.out.println("OK!");
             return true;
-
         } catch (SQLException ex) {
             ex.printStackTrace();
             return false;
@@ -319,8 +363,8 @@ public class DBManager {
      * Solicita a la BD modificar los datos de un cliente
      *
      * @param id id del cliente a modificar
-     * @param nombre nuevo nombre del cliente
-     * @param direccion nueva direcci贸n del cliente
+     * @param nuevoNombre nuevo nombre del cliente
+     * @param nuevaDireccion nueva direcci贸n del cliente
      * @return verdadero si pudo modificarlo, false en caso contrario
      */
     public static boolean updateCliente(int id, String nuevoNombre, String nuevaDireccion) {
@@ -338,7 +382,7 @@ public class DBManager {
             // Si tiene un primer registro, lo eliminamos
             if (rs.first()) {
                 rs.updateString(DB_CLI_NOM, nuevoNombre);
-                rs.updateString(DB_CLI_DIR, nuevaDireccion);
+                rs.updateString(DB_CLI_CIU, nuevaDireccion);
                 rs.updateRow();
                 rs.close();
                 System.out.println("OK!");
@@ -401,7 +445,7 @@ public class DBManager {
             while (rs.next()) {
                 int id = rs.getInt(DB_CLI_ID);
                 String n = rs.getString(DB_CLI_NOM);
-                String d = rs.getString(DB_CLI_DIR);
+                String d = rs.getString(DB_CLI_CIU);
                 System.out.println(id + "\t" + n + "\t" + d);
             }
             rs.close();
@@ -427,7 +471,7 @@ public class DBManager {
             // Imprimimos su informaci贸n por pantalla
             int cid = rs.getInt(DB_CLI_ID);
             String nombre = rs.getString(DB_CLI_NOM);
-            String direccion = rs.getString(DB_CLI_DIR);
+            String direccion = rs.getString(DB_CLI_CIU);
             System.out.println("Cliente " + cid + "\t" + nombre + "\t" + direccion);
 
         } catch (SQLException ex) {

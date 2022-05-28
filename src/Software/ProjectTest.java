@@ -2,10 +2,15 @@ package Software;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-
+/**
+*
+* @author Amalia
+*/
 public class ProjectTest {
 
-	@Test
+	/**
+	 * ejemplo de como funciona JUnit
+	 */
 	public void pideLineaTest() {
 		GestionClientes gCliente = new GestionClientes();
 		
