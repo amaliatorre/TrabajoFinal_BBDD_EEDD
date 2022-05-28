@@ -14,6 +14,7 @@
     2.A2 Issue #17 Class.forName(new com.mysql.jdbc.Driver ();).newInstance(); (Obsoleto) --> soluc. Class.forName("com.mysql.jdbc.Driver"); +
                    codifiicacion caracteres --> solc. url + ?useUnicode=true&characterEncoding=UTF-8
     2 A3 Issue #20  class path y librerias  --> liberias de Jnuit / Driver MySql
+    2 A4 Issue #27 Copia de seguridad de BBDD y comprobación 
   
  3. BBDD 
     3 A1 Issue #14 Configurar base de datos con usuario contraseña solo para proyecto en MySql  
