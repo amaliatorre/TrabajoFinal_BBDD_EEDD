@@ -1,6 +1,9 @@
 # TrabajoFinal_BBDD_EEDD
+Se aporta una lista de modifiaciones basadas en las issues del proyecto asi como un enlace al pdf de requisitos subrayando los requisitos realizados y cuales mejorar en la versión mejorada, asi como ser consciente de tenr que refactorizar y comprobar con regresión tras terminar al versión mejorada
+Imagen de paquetes, docuemntacion en info paquetes con la logica de almacenamiento d ela sclases por paquetes
 
-#RECORRIDO POR TRABAJO
+               --ESQUEMA E ISSUES--
+#RECORRIDO POR TRABAJO 
 1. CREACION DE GitHub y ISSUES
 
 
@@ -60,11 +63,14 @@
  6. UML
 
     6.A1 Issues #25 y #4--> UML Busqueda de plugins de automatización Code a UMl --FALLIDO
-                     * Version mejora: uml de la nueva clasificacion de clases
+                            uml de la nueva clasificacion de clases
+                            * Version mejora: resto de UML
                      
  7.JUNIT
  
    7.A1 Issues #3 JUnit --> Instalado 
                   * Version mejora: que test hacer?
   
-  
+  [Requisitos subrayados.pdf](https://github.com/amaliatorre/TrabajoFinal_BBDD_EEDD/files/8793792/Requisitos.subrayados.pdf)
+![image](https://user-images.githubusercontent.com/96339669/170881301-72167b44-dcd9-406f-8b76-67ff9c63f268.png)
+
