@@ -16,8 +16,8 @@ public class ProjectTest {
 	 */
 	public void pideLineaTest() {
 		
-		String result = gCliente.pideLinea("Balbi y Amalia");
-		assertEquals("Balbi y Amalia", result);				
+		String result = gCliente.pideLinea("message");
+		assertEquals("message", result);				
 	}
 	
 	public void pideIntTest() {
