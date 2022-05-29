@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 import com.mysql.jdbc.PreparedStatement;
 
-import Software.Cliente;
+import MapeoTablas.Cliente;
 
 import java.sql.ResultSet;
 
@@ -20,7 +20,7 @@ public class DBManager {
     /**
      * ConexiÛn a la base de datos
      */
-    private static Connection conn = null;
+    public static Connection conn = null;
 
     
     //String url = "jdbc:mysql://localhost:3306/demodb?useUnicode=true&characterEncoding=UTF-8";
@@ -60,29 +60,7 @@ public class DBManager {
      */
     private static final String DB_MSQ_CONN_NO = "ERROR EN LA CONEXI”N";
 
-    /**
-     * ConfiguraciÛn de la tabla Clientes
-     */
-    /**
-     * cte nombre de la tabla clientes
-     */
-    private static final String DB_CLI = "clientes";
-    /**
-     * query seleciona toda la tabla clientes
-     */
-    private static final String DB_CLI_SELECT = "SELECT * FROM " + DB_CLI;
-    /**
-     * cte nombre de la tabla clientes id
-     */
-    private static final String DB_CLI_ID = "id";
-    /**
-     * cte nombre de la tabla clientes nombre
-     */
-    private static final String DB_CLI_NOM = "nombre";
-    /**
-     * cte nombre de la tabla clientes ciudad
-     */
-    private static final String DB_CLI_CIU = "ciudad";
+   
     
 				    /****************/
 				    /*CONEXION BBDD */
@@ -156,7 +134,6 @@ public class DBManager {
             return false;
         }
     }
-
     /*****************/
     /*CERRAR CONEXION*/
     /****************/ 
@@ -180,7 +157,7 @@ public class DBManager {
      * crea el objeto conexion a traves del Drivermanager con el driver, url usser y passwd
      * @return connection 
      */ 
-    public static Connection mandarConexion ()
+    public static Connection mandarConexion()
     {
     	Connection conexion = null;
     	loadDriver();
@@ -198,286 +175,4 @@ public class DBManager {
     	return conexion=conn;
     }
  
-					    /**********************/
-					    /*METODOS GENERAL GET */
-					    /*********************/ 
-    
-    /***********/
-    /*GET TABLA*/
-    /**********/ 
-    
-    // Devuelve 
-    // Los argumentos indican el tipo de ResultSet deseado
-    /**
-     * Obtiene toda la tabla clientes de la base de datos
-     * @param resultSetType Tipo de ResultSet
-     * @param resultSetConcurrency Concurrencia del ResultSet
-     * @return ResultSet (del tipo indicado) con la tabla, null en caso de error
-     */
-    public static ResultSet getTablaClientes(int resultSetType, int resultSetConcurrency) {
-        try {
-        	
-        	PreparedStatement stmt =(PreparedStatement) conn.prepareStatement (DB_CLI_SELECT,ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-        	
-            //Statement stmt = conn.createStatement(resultSetType, resultSetConcurrency);
-            /*CONSULTA SQL --> db_cli_select = SELECT* FROM clientes*/
-        	
-            ResultSet rs = stmt.executeQuery(DB_CLI_SELECT);
-          
-            return rs;
-        } catch (SQLException ex) 
-        {
-            ex.printStackTrace();
-            return null;
-        }  
-    }
-
-    /**
-     * Obtiene toda la tabla clientes de la base de datos
-     *
-     * @return ResultSet (por defecto) con la tabla, null en caso de error
-     */
-    public static ResultSet getTablaClientes() {
-        return getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-    }
-
-    /*************/
-    /*GET CLIENTE*/
-    /************/ 
-
-    /**
-     * Solicita a la BD el cliente con id indicado
-     * @param id id del cliente
-     * @return ResultSet con el resultado de la consulta, null en caso de error
-     */
-    public static ResultSet getCliente(int id) {
-        try {
-            // Realizamos la consulta SQL
-        	Statement stmt =conn.createStatement(ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_UPDATABLE);
-          /*CONSULTA SQL*/
-        	String sql = DB_CLI_SELECT + " WHERE " + DB_CLI_ID + "='" + id + "';";
-            //System.out.println(sql);
-            ResultSet rs = stmt.executeQuery(sql);
-            //stmt.close();
-            
-            // Si no hay primer registro entonces no existe el cliente
-            if (!rs.first()) {
-                return null;
-            }
-
-            // Todo bien, devolvemos el cliente
-            return rs;
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-
-			    /********************************************/
-			    /*BLOQUE USADOS DIRECTOS EN GESTION CLIENTES*/
-			    /********************************************/
-   
-    
-    /****************************/
-    /*COMPROBACIONES EXISTENCIA*/
-    /***************************/
-    
-    /**
-     * Comprueba si en la BD existe el cliente con id indicado
-     *
-     * @param id id del cliente
-     * @return verdadero si existe, false en caso contrario
-     */
-    public static boolean existsCliente(int id) 
-    {
-        try 
-        {
-            // Obtenemos el cliente
-            ResultSet rs = getCliente(id);
-
-            // Si rs es null, se ha producido un error
-            if (rs == null) 
-            {
-                return false;
-            }
-
-            // Si no existe primer registro
-            if (!rs.first()) 
-            {
-                rs.close();
-                return false;
-            }
-
-            // Todo bien, existe el cliente
-            rs.close();
-            return true;
-
-        } 
-        catch (SQLException ex) 
-        {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-  
-    /****************/
-    /*MODIFICACIONES*/
-    /****************/
-   
-    /**
-     * Solicita a la BD insertar un nuevo registro cliente
-     *
-     * @param nombre nombre del cliente
-     * @param ciudad direcci√≥n del cliente
-     * @return verdadero si pudo insertarlo, false en caso contrario
-     */
-    public static boolean insertCliente(String nombre, String ciudad) {
-    	 
-        try {
-        	nombre=nombre.toUpperCase();
-        	ciudad= ciudad.toUpperCase();
-            // Obtenemos la tabla clientes
-            System.out.print("Insertando cliente " + nombre + "...");
-            ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_UPDATABLE);
-
-            int filaQueApunta=rs. getRow();
-            // Insertamos el nuevo registro
-            rs.moveToInsertRow();
-            rs.updateString(DB_CLI_NOM, nombre);
-            rs.updateString(DB_CLI_CIU, ciudad);
-            rs.insertRow();
-            rs.moveToCurrentRow();
-
-            // Todo bien, cerramos ResultSet y devolvemos true
-            rs.close();
-            System.out.println("OK!");
-            return true;
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * Solicita a la BD modificar los datos de un cliente
-     *
-     * @param id id del cliente a modificar
-     * @param nuevoNombre nuevo nombre del cliente
-     * @param nuevaDireccion nueva direcci√≥n del cliente
-     * @return verdadero si pudo modificarlo, false en caso contrario
-     */
-    public static boolean updateCliente(int id, String nuevoNombre, String nuevaDireccion) {
-        try {
-            // Obtenemos el cliente
-            System.out.print("Actualizando cliente " + id + "... ");
-            ResultSet rs = getCliente(id);
-
-            // Si no existe el Resultset
-            if (rs == null) {
-                System.out.println("Error. ResultSet null.");
-                return false;
-            }
-
-            // Si tiene un primer registro, lo eliminamos
-            if (rs.first()) {
-                rs.updateString(DB_CLI_NOM, nuevoNombre);
-                rs.updateString(DB_CLI_CIU, nuevaDireccion);
-                rs.updateRow();
-                rs.close();
-                System.out.println("OK!");
-                return true;
-            } else {
-                System.out.println("ERROR. ResultSet vac√≠o.");
-                return false;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-
-    /**
-     * Solicita a la BD eliminar un cliente
-     *
-     * @param id id del cliente a eliminar
-     * @return verdadero si pudo eliminarlo, false en caso contrario
-     */
-    public static boolean deleteCliente(int id) {
-        try {
-            System.out.print("Eliminando cliente " + id + "... ");
-
-            // Obtenemos el cliente
-            ResultSet rs = getCliente(id);
-
-            // Si no existe el Resultset
-            if (rs == null) {
-                System.out.println("ERROR. ResultSet null.");
-                return false;
-            }
-
-            // Si existe y tiene primer registro, lo eliminamos
-            if (rs.first()) {
-                rs.deleteRow();
-                rs.close();
-                System.out.println("OK!");
-                return true;
-            } else {
-                System.out.println("ERROR. ResultSet vac√≠o.");
-                return false;
-            }
-
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            return false;
-        }
-    }
-    
-    /*********************/
-    /*MOSTRAR INFORMACION*/
-    /*********************/
-    /**
-     * Imprime por pantalla el contenido de la tabla clientes
-     */
-    public static void printTablaClientes() {
-        try {
-            ResultSet rs = getTablaClientes(ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
-            while (rs.next()) {
-                int id = rs.getInt(DB_CLI_ID);
-                String n = rs.getString(DB_CLI_NOM);
-                String d = rs.getString(DB_CLI_CIU);
-                System.out.println(id + "\t" + n + "\t" + d);
-            }
-            rs.close();
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Imprime los datos del cliente con id indicado
-     *
-     * @param id id del cliente
-     */
-    public static void printCliente(int id) {
-        try {
-            // Obtenemos el cliente
-            ResultSet rs = getCliente(id);
-            if (rs == null || !rs.first()) {
-                System.out.println("Cliente " + id + " NO EXISTE");
-                return;
-            }
-            
-            // Imprimimos su informaci√≥n por pantalla
-            int cid = rs.getInt(DB_CLI_ID);
-            String nombre = rs.getString(DB_CLI_NOM);
-            String direccion = rs.getString(DB_CLI_CIU);
-            System.out.println("Cliente " + cid + "\t" + nombre + "\t" + direccion);
-
-        } catch (SQLException ex) {
-            System.out.println("Error al solicitar cliente " + id);
-            ex.printStackTrace();
-        }
-    }
-
-}
+}					
